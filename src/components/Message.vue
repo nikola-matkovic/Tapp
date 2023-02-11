@@ -7,7 +7,7 @@
 <script setup>
 
 defineProps({
-    message: String,
+    message: Object,
     userId: [Number, String],
 })
 

@@ -11,12 +11,17 @@ import smile from './assets/smile.svg';
 import hearth from './assets/heart.svg';
 import send from './assets/send.svg';
 import file from './assets/file.svg';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import axios from 'axios';
 
 const messages = ref({});
 const userId = ref("1");
-const haveContentToSend = ref(false);
+const voiceElement = ref(null);
+const mediaRecorder = ref(null);
+
+const haveContentToSend = computed(() => {
+	return contentToSend.value.audio || contentToSend.value.image || contentToSend.value.text || contentToSend.value.file;
+});
 
 const contentToSend = ref({
 	audio: null,
@@ -26,9 +31,14 @@ const contentToSend = ref({
 });
 
 function handleChange() {
-	console.log(contentToSend.value);
+	if (contentToSend.value.audio) {
+		mediaRecorder.value.stop();
+	}
 }
 
+watch(contentToSend, (newVal, oldVal) => {
+	console.log(newVal);
+});
 
 onMounted(async () => {
 
@@ -42,8 +52,40 @@ onMounted(async () => {
 	}
 });
 
-function startRecording() {
-	
+function handleSend() {
+	if (contentToSend.value.audio) {
+		mediaRecorder.value.stop();
+	}
+	console.log(contentToSend.value);
+}
+
+async function startRecording() {
+	console.log("started"); 
+
+	contentToSend.value.audio = "recording";
+
+	const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+
+	mediaRecorder.value = new MediaRecorder(stream);
+
+	mediaRecorder.value.start();
+
+	const audioChunks = [];
+
+	mediaRecorder.value.addEventListener("dataavailable", event => {
+		audioChunks.push(event.data);
+		console.log(event.data);
+	});
+
+	mediaRecorder.value.addEventListener("stop", () => {
+		const audioBlob = new Blob(audioChunks);
+		const audioUrl = URL.createObjectURL(audioBlob);
+		const audio = new Audio(audioUrl);
+
+		audio.play();
+
+		contentToSend.value.audio = audioBlob;
+	});
 }
 
 </script>
@@ -85,7 +127,7 @@ function startRecording() {
 			<div class="image">
 				<img :src="image" alt="">
 			</div>
-			<div class="voice" onclick="startRecording">
+			<div ref="voiceElement" class="voice" @click="startRecording">
 				<img :src="voice" alt="">
 			</div>
 			<div class="text">

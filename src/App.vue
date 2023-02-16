@@ -154,7 +154,7 @@ async function startRecording() {
 	--profile-image-size: 50px;
 	--header-padding-size: 5px;
 	--icons-size : 20px;
-	--header-size : var(--profile-image-size) + var(--header-padding-size) * 2; 
+	--header-size : calc(var(--profile-image-size) + var(--header-padding-size) * 2); 
 }
 
 #app{

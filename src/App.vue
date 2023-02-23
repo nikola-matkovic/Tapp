@@ -1,23 +1,25 @@
 <script setup>
 
 import Message from './components/Message.vue';
-import profilePhoto from './assets/profile.jpg';
-import phone from './assets/phone.svg';
-import video from './assets/video.svg';
-import camera from './assets/camera.svg';
-import image from './assets/image.svg';
-import voice from './assets/voice.svg';
-import smile from './assets/smile.svg';
-import hearth from './assets/heart.svg';
-import send from './assets/send.svg';
-import file from './assets/file.svg';
+import images from './assets/index.js';
 import { onMounted, ref, computed, watch } from 'vue';
-import axios from 'axios';
+import getMessages from './functions/getMessages.js';
+
+const { profilePhoto, phone, video, file, camera, image, voice, smile, send, hearth } = images;
 
 const messages = ref({});
 const userId = ref("1");
 const voiceElement = ref(null);
-const mediaRecorder = ref(null);
+const voiceRecorder = ref(null);
+const videoRecorder = ref(null);
+
+const isVideoRecording = computed(() => {
+	return contentToSend.value.video === "recording";
+});
+
+const isAudioRecording = computed(() => {
+	return contentToSend.value.audio === "recording";
+});
 
 const haveContentToSend = computed(() => {
 	return contentToSend.value.audio || contentToSend.value.image || contentToSend.value.text || contentToSend.value.file;
@@ -32,7 +34,7 @@ const contentToSend = ref({
 
 function handleChange() {
 	if (contentToSend.value.audio) {
-		mediaRecorder.value.stop();
+		voiceRecorder.value.stop();
 	}
 }
 
@@ -41,58 +43,81 @@ watch(contentToSend, (newVal, oldVal) => {
 });
 
 onMounted(async () => {
-
-	try {
-		let res = await axios.get('http://localhost:3000/messages');
-		messages.value = res.data;
-	}
-
-	catch (err) {
-		console.log(err);
-	}
+	messages.value = await getMessages();
 });
 
 function handleSend() {
 	if (contentToSend.value.audio) {
-		mediaRecorder.value.stop();
+		voiceRecorder.value.stop();
 	}
 	console.log(contentToSend.value);
 }
 
-async function startRecording() {
-	console.log("started"); 
+async function startAudioRecording() {
 
 	contentToSend.value.audio = "recording";
 
 	const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
-	mediaRecorder.value = new MediaRecorder(stream);
+	voiceRecorder.value = new MediaRecorder(stream);
 
-	mediaRecorder.value.start();
+	voiceRecorder.value.start();
 
 	const audioChunks = [];
 
-	mediaRecorder.value.addEventListener("dataavailable", event => {
+	voiceRecorder.value.addEventListener("dataavailable", event => {
 		audioChunks.push(event.data);
 		console.log(event.data);
 	});
 
-	mediaRecorder.value.addEventListener("stop", () => {
+	voiceRecorder.value.addEventListener("stop", () => {
 		const audioBlob = new Blob(audioChunks);
 		const audioUrl = URL.createObjectURL(audioBlob);
 		const audio = new Audio(audioUrl);
 
-		audio.play();
+		//audio.play();
 
 		contentToSend.value.audio = audioBlob;
 	});
 }
+
+async function startVideoRecording() {
+
+contentToSend.value.video = "recording";
+
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+
+videoRecorder.value = new voiceRecorder(stream);
+
+voiceRecorder.value.start();
+
+const audioChunks = [];
+
+voiceRecorder.value.addEventListener("dataavailable", event => {
+	audioChunks.push(event.data);
+	console.log(event.data);
+});
+
+voiceRecorder.value.addEventListener("stop", () => {
+	const audioBlob = new Blob(audioChunks);
+	const audioUrl = URL.createObjectURL(audioBlob);
+	const audio = new Audio(audioUrl);
+
+	//audio.play();
+
+	contentToSend.value.audio = audioBlob;
+});
+}
+
 
 </script>
 
 <template>
 	
 	<div class="cont">
+		<div v-if="isVideoRecording" id="video-prew">
+			<video muted autoplay></video>
+		</div>
 		<header>
 
 			<div class="left">
@@ -121,13 +146,13 @@ async function startRecording() {
 			<div class="file">
 				<img :src="file" alt="">
 			</div>
-			<div class="camera">
+			<div class="camera" @click="starVideoRecording">
 				<img :src="camera" alt="">
 			</div>
 			<div class="image">
 				<img :src="image" alt="">
 			</div>
-			<div ref="voiceElement" class="voice" @click="startRecording">
+			<div ref="voiceElement" class="voice" @click="startAudioRecording">
 				<img :src="voice" alt="">
 			</div>
 			<div class="text">
@@ -224,7 +249,7 @@ header{
 
 .cont {
 	width: 470px;
-	height: 80%;
+	height: 100%;
 	border: 1px solid black;
 	border-radius: 10px;
 	overflow: hidden;

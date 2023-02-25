@@ -5,9 +5,9 @@ import camera from './camera.svg';
 import image from './image.svg';
 import voice from './voice.svg';
 import smile from './smile.svg';
-import hearth from './heart.svg';
+import hearth from './hearth.svg';
 import send from './send.svg';
-import file from './file.svg';
+import upload from './upload.svg';
 
 export default {
     profilePhoto,
@@ -19,5 +19,5 @@ export default {
     smile,
     hearth,
     send,
-    file
+    upload
 }

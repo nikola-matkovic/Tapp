@@ -4,14 +4,55 @@ import Message from './components/Message.vue';
 import images from './assets/index.js';
 import { onMounted, ref, computed, watch } from 'vue';
 import getMessages from './functions/getMessages.js';
+import Recorder from './classes/Recorder.js';
 
-const { profilePhoto, phone, video, file, camera, image, voice, smile, send, hearth } = images;
+const { profilePhoto, phone, video, upload, camera, image, voice, smile, send, hearth } = images;
 
 const messages = ref({});
 const userId = ref("1");
-const voiceElement = ref(null);
-const voiceRecorder = ref(null);
-const videoRecorder = ref(null);
+const recorder = ref(null);
+
+const contentToSend = ref({
+	audio: null,
+	image: null,
+	text: null,
+	file: null,
+});
+
+async function handleSend() {
+
+	if (contentToSend.value.audio || contentToSend.value.video) {
+		
+		recorder.value.stop();
+
+		let media = await recorder.value.getMedia();
+
+		media.mediaElement.play();
+
+	}
+
+	contentToSend.value = {
+		audio: null,
+		image: null,
+		text: null,
+		file: null,
+	};
+}
+
+async function startRecordingHandler(sources) {
+	if (sources.audio) {
+		contentToSend.value.audio = "recording";
+	}
+	else if (sources.video) {
+		contentToSend.value.video = "recording";
+	}
+
+	recorder.value = new Recorder(sources);
+	await recorder.value.start();
+
+}
+
+//computed properties
 
 const isVideoRecording = computed(() => {
 	return contentToSend.value.video === "recording";
@@ -25,89 +66,17 @@ const haveContentToSend = computed(() => {
 	return contentToSend.value.audio || contentToSend.value.image || contentToSend.value.text || contentToSend.value.file;
 });
 
-const contentToSend = ref({
-	audio: null,
-	image: null,
-	text: null,
-	file: null,
-});
-
-function handleChange() {
-	if (contentToSend.value.audio) {
-		voiceRecorder.value.stop();
-	}
-}
+//watchers
 
 watch(contentToSend, (newVal, oldVal) => {
-	console.log(newVal);
+	//console.log(newVal);
 });
+
+//mounted
 
 onMounted(async () => {
 	messages.value = await getMessages();
 });
-
-function handleSend() {
-	if (contentToSend.value.audio) {
-		voiceRecorder.value.stop();
-	}
-	console.log(contentToSend.value);
-}
-
-async function startAudioRecording() {
-
-	contentToSend.value.audio = "recording";
-
-	const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-
-	voiceRecorder.value = new MediaRecorder(stream);
-
-	voiceRecorder.value.start();
-
-	const audioChunks = [];
-
-	voiceRecorder.value.addEventListener("dataavailable", event => {
-		audioChunks.push(event.data);
-		console.log(event.data);
-	});
-
-	voiceRecorder.value.addEventListener("stop", () => {
-		const audioBlob = new Blob(audioChunks);
-		const audioUrl = URL.createObjectURL(audioBlob);
-		const audio = new Audio(audioUrl);
-
-		//audio.play();
-
-		contentToSend.value.audio = audioBlob;
-	});
-}
-
-async function startVideoRecording() {
-
-contentToSend.value.video = "recording";
-
-const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-
-videoRecorder.value = new voiceRecorder(stream);
-
-voiceRecorder.value.start();
-
-const audioChunks = [];
-
-voiceRecorder.value.addEventListener("dataavailable", event => {
-	audioChunks.push(event.data);
-	console.log(event.data);
-});
-
-voiceRecorder.value.addEventListener("stop", () => {
-	const audioBlob = new Blob(audioChunks);
-	const audioUrl = URL.createObjectURL(audioBlob);
-	const audio = new Audio(audioUrl);
-
-	//audio.play();
-
-	contentToSend.value.audio = audioBlob;
-});
-}
 
 
 </script>
@@ -144,15 +113,15 @@ voiceRecorder.value.addEventListener("stop", () => {
 		</main>
 		<footer>
 			<div class="file">
-				<img :src="file" alt="">
+				<img :src="upload" alt="">
 			</div>
-			<div class="camera" @click="starVideoRecording">
+			<div class="camera" @click="startRecordingHandler({audio: true, video: true})">
 				<img :src="camera" alt="">
 			</div>
 			<div class="image">
 				<img :src="image" alt="">
 			</div>
-			<div ref="voiceElement" class="voice" @click="startAudioRecording">
+			<div ref="voiceElement" class="voice" @click="startRecordingHandler({audio: true, video: false})">
 				<img :src="voice" alt="">
 			</div>
 			<div class="text">
@@ -291,7 +260,7 @@ footer {
 	justify-content: space-evenly;
 	gap: 20px;
 	padding: 0 10px;
-	background-color: rgb(234, 216, 216);
+	background-color: rgb(255, 255, 255);
 	height: 50px;
 
 	img {

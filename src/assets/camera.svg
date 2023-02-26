@@ -72,7 +72,7 @@
      r="20"
      fill="#404040"
      id="circle431"
-     style="fill:#24a1e9;fill-opacity:1" />
+     style="fill:#00a5ff;fill-opacity:1" />
   <circle
      cx="50"
      cy="45"
@@ -84,9 +84,9 @@
      cx="50"
      cy="45"
      r="5"
-     fill="#24a1e9"
+     fill="#00a5ff"
      id="circle435"
-     style="fill:#24a1e9;fill-opacity:1" />
+     style="fill:#00a5ff;fill-opacity:1" />
   <!-- bljeskalica kamere -->
   <rect
      x="40"
@@ -96,5 +96,5 @@
      rx="2"
      ry="2"
      id="rect437"
-     style="fill:#24a1e9;fill-opacity:1" />
+     style="fill:#00a5ff;fill-opacity:1" />
 </svg>

@@ -10,6 +10,13 @@ export default class Recorder {
         
         const stream = await navigator.mediaDevices.getUserMedia(this.sources)
 
+        if (this.sources.video) { 
+            this.videoPrew = document.getElementById('video-prew');
+            this.videoPrew.srcObject = stream;
+        }
+
+        console.log(this.videoPrew);
+
         this.recorder = new MediaRecorder(stream);
 
         this.recorder.start();

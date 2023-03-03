@@ -17,6 +17,7 @@ const contentToSend = ref({
 	image: null,
 	text: null,
 	file: null,
+	video: null,
 });
 
 async function handleSend() {
@@ -36,16 +37,19 @@ async function handleSend() {
 		image: null,
 		text: null,
 		file: null,
+		video: null,
 	};
 }
 
 async function startRecordingHandler(sources) {
-	if (sources.audio) {
-		contentToSend.value.audio = "recording";
-	}
-	else if (sources.video) {
+	if (sources.video) {
 		contentToSend.value.video = "recording";
 	}
+	else if (sources.audio) {
+		contentToSend.value.audio = "recording";
+	}
+
+	console.log(arguments);
 
 	recorder.value = new Recorder(sources);
 	await recorder.value.start();
@@ -63,13 +67,13 @@ const isAudioRecording = computed(() => {
 });
 
 const haveContentToSend = computed(() => {
-	return contentToSend.value.audio || contentToSend.value.image || contentToSend.value.text || contentToSend.value.file;
+	return contentToSend.value.audio || contentToSend.value.image || contentToSend.value.text || contentToSend.value.file || contentToSend.value.video;
 });
 
 //watchers
 
 watch(contentToSend, (newVal, oldVal) => {
-	//console.log(newVal);
+	console.log(newVal);
 });
 
 //mounted
@@ -84,8 +88,8 @@ onMounted(async () => {
 <template>
 	
 	<div class="cont">
-		<div v-if="isVideoRecording" id="video-prew">
-			<video muted autoplay></video>
+		<div v-if="isVideoRecording" >
+			<video muted autoplay id="video-prew"></video>
 		</div>
 		<header>
 
@@ -225,6 +229,7 @@ header{
 	display: grid;
 	grid-template-rows: var(--header-size) 1fr 50px;
 	resize: both;
+	position: relative;
 }
 
 main {
@@ -304,5 +309,14 @@ textarea::-webkit-scrollbar-thumb{
 	border: none;
 }
 
+#video-prew{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: red;
+	z-index: 2;
+}
 
 </style>

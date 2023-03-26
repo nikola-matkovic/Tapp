@@ -66,7 +66,7 @@ export default class Recorder {
 
     stop() {
         this.recorder.stop()
-        this.clear();
+        this.sources.video && this.clear();
     }
 
     clear(){

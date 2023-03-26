@@ -15,33 +15,28 @@ const prev = ref(null);
 const imgPrev = ref(null);
 const shouldShowPreview = ref(false);
 
-const contentToSend = ref({
-	audio: null,
-	image: null,
-	text: null,
-	file: null,
-	video: null,
-});
+const contentToSend = ref(null);
+
+restartContentToSend();
 
 async function handleSend() {
 
-	if (contentToSend.value.audio || contentToSend.value.video) {
+	if (contentToSend.value.audio) {
 		
 		recorder.value.stop();
-
+		
 		let media = await recorder.value.getMedia();
 
-		media.mediaElement.play();
-
+		contentToSend.value.audio = media.blob;
 	}
 
-	contentToSend.value = {
-		audio: null,
-		image: null,
-		text: null,
-		file: null,
-		video: null,
-	};
+	await sendToServer()
+
+	restartContentToSend();
+}
+
+async function sendToServer(){
+	console.log(contentToSend.value);
 }
 
 async function openRecorer(sources) {
@@ -58,6 +53,17 @@ async function openRecorer(sources) {
 	await recorder.value.prev();
 }
 
+
+async function recordVoice(sources){
+	recorder.value = new Recorder(sources);
+
+	contentToSend.value.audio = "recording";
+
+	await recorder.value.prev();
+	await recorder.value.start();
+
+}
+
 async function handleRecordButtonClick(){
 	if(isVideoRecording.value){
 		recorder.value.stop()
@@ -67,6 +73,9 @@ async function handleRecordButtonClick(){
 		prev.value.src = media.url;
 		
 		contentToSend.value.video = media.blob;
+
+		console.log("changed content to send")
+
 		contentToSend.value.audio = null;
 	}
 	else{
@@ -89,7 +98,6 @@ async function hanleCapturePhotoClick(){
 
 	let media = await recorder.value.getMedia()
 	imgPrev.value.src = media.url;
-
 
 	contentToSend.value.image = media.blob;
 	contentToSend.value.audio = ""
@@ -114,18 +122,17 @@ const isPhotoCaptured = computed ( () => {
 })
 
 const haveContentToSend = computed(() => {
-	return contentToSend.value.audio ||
-	contentToSend.value.image ||
-	contentToSend.value.text || 
-	contentToSend.value.file || 
-	contentToSend.value.video;
+	return Object.values(contentToSend.value).some(content => content)
 });
 
 //watchers
 
 watch(contentToSend, (newVal, oldVal) => {
-	console.log(newVal);
-});
+	console.log("watchs", newVal);
+	},
+	{deep: true}
+);
+
 //mounted
 
 onMounted(async () => {
@@ -133,13 +140,26 @@ onMounted(async () => {
 });
 
 
+
+//helpers
+
+function restartContentToSend(){
+	contentToSend.value = {
+        audio: null,
+        image: null,
+        text: null,
+        file: null,
+        video: null,
+    };
+}
+
 </script>
 
 <template>
 	
 	<div class="cont">
 		<div class="video-prev" v-if="shouldShowPreview" >
-			<video ref="prev" id="video-prev" muted autoplay :controls="isVideoRecorded"></video>
+			<video ref="prev" id="video-prev" :muted="!isVideoRecorded" :autoplay="!isVideoRecorded" :controls="isVideoRecorded"></video>
 			<img :style="{display: isPhotoCaptured ? 'block' : 'none'  }" ref="imgPrev" alt="">
 			<div class="settings">
 				<button class="flash">Flash</button>
@@ -188,7 +208,7 @@ onMounted(async () => {
 			<div class="image">
 				<img :src="image" alt="">
 			</div>
-			<div ref="voiceElement" class="voice" @click="openRecorer({audio: true, video: false})">
+			<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
 				<img :src="voice" alt="">
 			</div>
 			<div class="text">

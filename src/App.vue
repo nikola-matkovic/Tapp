@@ -101,6 +101,15 @@ async function hanleCapturePhotoClick(){
 	contentToSend.value.audio = ""
 }
 
+
+function handleAddGaleryFiles(e){
+	contentToSend.value.galery = e.target.files;
+}
+
+function handleAddFiles(e){
+	contentToSend.value.files = e.target.files;
+}
+
 //computed properties
 
 const isVideoRecording = computed(() => {
@@ -152,7 +161,7 @@ function restartContentToSend(){
         audio: null,
         image: null,
         text: null,
-        file: null,
+        files: null,
         video: null,
 		galery: []
     };
@@ -177,7 +186,6 @@ function restartContentToSend(){
 				<button class="photo-button" @click="hanleCapturePhotoClick">Photo</button>
 				<button class="change-button">Change</button>
 			</div>
-
 		</div>
 		<header>
 
@@ -205,7 +213,10 @@ function restartContentToSend(){
 		</main>
 		<footer>
 			<div class="file">
-				<img :src="upload" alt="">
+				<label for="file-picker">
+					<img :src="upload" alt="">
+				</label>
+				<input type="file"  @change="handleAddFiles" id="file-picker" multiple>
 			</div>
 			<div class="camera" @click="openRecorer({audio: true, video: true})">
 				<img :src="camera" alt="">
@@ -214,7 +225,7 @@ function restartContentToSend(){
 				<label for="galery-picker">
 					<img :src="image" alt="">
 				</label>
-				<input type="file" id="galery-picker" accept="image/*,video/*" multiple>
+				<input type="file" @change="handleAddGaleryFiles" id="galery-picker" accept="image/*,video/*" multiple>
 			</div>
 			<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
 				<img :src="voice" alt="">
@@ -448,7 +459,7 @@ textarea::-webkit-scrollbar-thumb{
 	--height: 100px;
 }
 
-#galery-picker{
+input[type="file"]{
 	display: none;
 }
 

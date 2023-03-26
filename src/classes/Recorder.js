@@ -6,18 +6,21 @@ export default class Recorder {
         this.sources = sources;
     }
 
-    async start() {
-        
-        const stream = await navigator.mediaDevices.getUserMedia(this.sources)
+    async prev() {
+
+        this.stream = await navigator.mediaDevices.getUserMedia(this.sources)
 
         if (this.sources.video) { 
-            this.videoPrew = document.getElementById('video-prew');
-            this.videoPrew.srcObject = stream;
+            this.videoPrev = document.getElementById('video-prev');
+            this.videoPrev.srcObject = this.stream;
         }
+    }
 
-        console.log(this.videoPrew);
+    async start(){
 
-        this.recorder = new MediaRecorder(stream);
+        if(!this.stream) await this.prev();
+
+        this.recorder = new MediaRecorder(this.stream);
 
         this.recorder.start();
 
@@ -26,29 +29,52 @@ export default class Recorder {
         this.recorder.addEventListener("dataavailable", event => {
             mediaChunks.push(event.data);
         });
-    
+
         this.recorder.addEventListener("stop", () => {
 
             const blob = new Blob(mediaChunks);
-            const Url = URL.createObjectURL(blob);
-            let mediaElement = null;
+            const url = URL.createObjectURL(blob)
 
-            if (this.sources.video) {
-                mediaElement = document.createElement('video');
-                mediaElement.src = Url;
-                mediaElement.controls = true;
-                mediaElement.autoplay = true;
-            } else {
-                mediaElement = new Audio(Url);
-            }
+            this.media = { blob, url };
 
-            this.media = { blob, Url, mediaElement };
-        
         });
+
+    }
+
+    async capturePhoto(){
+        if (!this.stream) {
+            await this.prev();
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = this.videoPrev.videoWidth;
+        canvas.height = this.videoPrev.videoHeight;
+
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(this.videoPrev, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(blob => {
+            this.media = {
+                blob,
+                url: URL.createObjectURL(blob)
+            };
+        }, 'image/jpeg', 1);
+        
+        this.clear();
     }
 
     stop() {
-        this.recorder.stop();
+        this.recorder.stop()
+        this.clear();
+    }
+
+    clear(){
+        this.videoPrev.srcObject = null;
+        this.stream.getTracks().forEach(function(track) {
+            track.stop();
+        });
+        this.stream = null;
     }
 
     async getMedia() {

@@ -11,6 +11,9 @@ const { profilePhoto, phone, video, upload, camera, image, voice, smile, send, h
 const messages = ref({});
 const userId = ref("1");
 const recorder = ref(null);
+const prev = ref(null);
+const imgPrev = ref(null);
+const shouldShowPreview = ref(false);
 
 const contentToSend = ref({
 	audio: null,
@@ -41,19 +44,55 @@ async function handleSend() {
 	};
 }
 
-async function startRecordingHandler(sources) {
+async function openRecorer(sources) {
+	shouldShowPreview.value = true;
 	if (sources.video) {
-		contentToSend.value.video = "recording";
+		contentToSend.value.video = "preview";
 	}
 	else if (sources.audio) {
-		contentToSend.value.audio = "recording";
+		contentToSend.value.audio = "preview";
 	}
 
-	console.log(arguments);
-
 	recorder.value = new Recorder(sources);
-	await recorder.value.start();
 
+	await recorder.value.prev();
+}
+
+async function handleRecordButtonClick(){
+	if(isVideoRecording.value){
+		recorder.value.stop()
+
+		let media = await recorder.value.getMedia()
+
+		prev.value.src = media.url;
+		
+		contentToSend.value.video = media.blob;
+		contentToSend.value.audio = null;
+	}
+	else{
+		recorder.value.start();
+
+		contentToSend.value.video = "recording"
+		contentToSend.value.audio = "recording"
+	}
+}
+
+async function hanleCapturePhotoClick(){
+
+	if(isPhotoCaptured.value){
+		recorder.value.prev();
+		contentToSend.value.image = null;
+		return
+	}
+
+	recorder.value.capturePhoto();
+
+	let media = await recorder.value.getMedia()
+	imgPrev.value.src = media.url;
+
+
+	contentToSend.value.image = media.blob;
+	contentToSend.value.audio = ""
 }
 
 //computed properties
@@ -66,8 +105,20 @@ const isAudioRecording = computed(() => {
 	return contentToSend.value.audio === "recording";
 });
 
+const isVideoRecorded = computed(() => {
+	return contentToSend.value.video instanceof Blob;
+})
+
+const isPhotoCaptured = computed ( () => {
+	return contentToSend.value.image instanceof Blob;
+})
+
 const haveContentToSend = computed(() => {
-	return contentToSend.value.audio || contentToSend.value.image || contentToSend.value.text || contentToSend.value.file || contentToSend.value.video;
+	return contentToSend.value.audio ||
+	contentToSend.value.image ||
+	contentToSend.value.text || 
+	contentToSend.value.file || 
+	contentToSend.value.video;
 });
 
 //watchers
@@ -75,7 +126,6 @@ const haveContentToSend = computed(() => {
 watch(contentToSend, (newVal, oldVal) => {
 	console.log(newVal);
 });
-
 //mounted
 
 onMounted(async () => {
@@ -88,8 +138,21 @@ onMounted(async () => {
 <template>
 	
 	<div class="cont">
-		<div v-if="isVideoRecording" >
-			<video muted autoplay id="video-prew"></video>
+		<div class="video-prev" v-if="shouldShowPreview" >
+			<video ref="prev" id="video-prev" muted autoplay :controls="isVideoRecorded"></video>
+			<img :style="{display: isPhotoCaptured ? 'block' : 'none'  }" ref="imgPrev" alt="">
+			<div class="settings">
+				<button class="flash">Flash</button>
+				<button class="mute">Mute</button>
+				<button class="timer">Timer</button>
+			</div>
+
+			<div class="options">
+				<button class="video-button" @click="handleRecordButtonClick">Video</button>
+				<button class="photo-button" @click="hanleCapturePhotoClick">Photo</button>
+				<button class="change-button">Change</button>
+			</div>
+
 		</div>
 		<header>
 
@@ -119,13 +182,13 @@ onMounted(async () => {
 			<div class="file">
 				<img :src="upload" alt="">
 			</div>
-			<div class="camera" @click="startRecordingHandler({audio: true, video: true})">
+			<div class="camera" @click="openRecorer({audio: true, video: true})">
 				<img :src="camera" alt="">
 			</div>
 			<div class="image">
 				<img :src="image" alt="">
 			</div>
-			<div ref="voiceElement" class="voice" @click="startRecordingHandler({audio: true, video: false})">
+			<div ref="voiceElement" class="voice" @click="openRecorer({audio: true, video: false})">
 				<img :src="voice" alt="">
 			</div>
 			<div class="text">
@@ -309,14 +372,53 @@ textarea::-webkit-scrollbar-thumb{
 	border: none;
 }
 
-#video-prew{
+.video-prev video{
 	width: 100%;
 	height: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: red;
 	z-index: 2;
+	background-color: black
 }
+
+.video-prev img{
+	z-index: 3;
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.options, .settings{
+	--height: 200px;
+	position: absolute;
+	bottom: 100px;
+	height: var(--height);
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.1);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 4;
+	padding: 10px;
+	.video-button, .photo-button, .change-button, .flash, .mute, .timer{
+		width: min(calc(var(--height) - 30px), 20%);
+        aspect-ratio: 1;
+        background-color: black;
+        border-radius: 50%;
+		border: 3px solid white;
+		outline: 3px solid white;
+		outline-offset: 3px;
+		color: white;
+	}
+}
+
+.settings{
+	bottom: unset;
+	top: 0;
+	--height: 100px;
+}
+
 
 </style>

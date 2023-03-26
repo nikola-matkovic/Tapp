@@ -5,6 +5,10 @@ import vue from "@vitejs/plugin-vue"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  devServer: {
+    port: 80,
+    host: '0.0.0.0'
+  },
   plugins: [vue()],
   resolve: {
     alias: {
@@ -12,7 +16,6 @@ export default defineConfig({
     }
   },
   build: {
-    emptyOutDir: true,
     rollupOptions: {
       output: {
         entryFileNames: `assets/[name].js`,

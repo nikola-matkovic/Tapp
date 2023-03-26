@@ -74,8 +74,6 @@ async function handleRecordButtonClick(){
 		
 		contentToSend.value.video = media.blob;
 
-		console.log("changed content to send")
-
 		contentToSend.value.audio = null;
 	}
 	else{
@@ -122,13 +120,13 @@ const isPhotoCaptured = computed ( () => {
 })
 
 const haveContentToSend = computed(() => {
-	return Object.values(contentToSend.value).some(content => content)
+	return Object.values(contentToSend.value).some(content => content !== null  && content?.length > 0);
 });
 
 //watchers
 
 watch(contentToSend, (newVal, oldVal) => {
-	console.log("watchs", newVal);
+	console.log(newVal);
 	},
 	{deep: true}
 );
@@ -137,6 +135,12 @@ watch(contentToSend, (newVal, oldVal) => {
 
 onMounted(async () => {
 	messages.value = await getMessages();
+	document.addEventListener("keydown" , (e) =>{
+		if(e.key=== "Escape"){
+			// restartContentToSend();
+			shouldShowPreview.value = false;
+		}
+	})
 });
 
 
@@ -150,6 +154,7 @@ function restartContentToSend(){
         text: null,
         file: null,
         video: null,
+		galery: []
     };
 }
 
@@ -206,7 +211,10 @@ function restartContentToSend(){
 				<img :src="camera" alt="">
 			</div>
 			<div class="image">
-				<img :src="image" alt="">
+				<label for="galery-picker">
+					<img :src="image" alt="">
+				</label>
+				<input type="file" id="galery-picker" accept="image/*,video/*" multiple>
 			</div>
 			<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
 				<img :src="voice" alt="">
@@ -438,6 +446,10 @@ textarea::-webkit-scrollbar-thumb{
 	bottom: unset;
 	top: 0;
 	--height: 100px;
+}
+
+#galery-picker{
+	display: none;
 }
 
 

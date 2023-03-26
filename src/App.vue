@@ -103,7 +103,15 @@ async function hanleCapturePhotoClick(){
 
 
 function handleAddGaleryFiles(e){
-	contentToSend.value.galery = e.target.files;
+	let files = Array.from(e.target.files)
+
+	contentToSend.value.galery = files.map(file => {
+
+		let url = URL.createObjectURL(file);
+		let type = file.type.split("/")[0]
+
+		return {file, url, type};
+	});
 }
 
 function handleAddFiles(e){
@@ -212,36 +220,45 @@ function restartContentToSend(){
 			<Message :userId="userId" v-for="message in messages" :key="message.id" :message="message" />
 		</main>
 		<footer>
-			<div class="file">
-				<label for="file-picker">
-					<img :src="upload" alt="">
-				</label>
-				<input type="file"  @change="handleAddFiles" id="file-picker" multiple>
-			</div>
-			<div class="camera" @click="openRecorer({audio: true, video: true})">
-				<img :src="camera" alt="">
-			</div>
-			<div class="image">
-				<label for="galery-picker">
-					<img :src="image" alt="">
-				</label>
-				<input type="file" @change="handleAddGaleryFiles" id="galery-picker" accept="image/*,video/*" multiple>
-			</div>
-			<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
-				<img :src="voice" alt="">
-			</div>
-			<div class="text">
-				<textarea v-model="contentToSend.text" @change="handleChange"></textarea>
-				<div class="smile">
-					<img :src="smile" alt="">
+			<div class="file-prev">
+				<div v-for="file in contentToSend.galery">
+					<img v-if="file.type==='image'" :src="file.url" alt="">
+					<video v-if="file.type==='video'" :src="file.url" alt=""> </video>
 				</div>
 			</div>
-			<div class="send">
-				<div @click="handleSend" v-if="haveContentToSend" class="send">
-					<img :src="send" alt="">
+
+			<div class="asset-options">
+				<div class="file">
+					<label for="file-picker">
+						<img :src="upload" alt="">
+					</label>
+					<input type="file"  @change="handleAddFiles" id="file-picker" multiple>
 				</div>
-				<div v-else class="hearth-icon">
-					<img :src="hearth" alt="">
+				<div class="camera" @click="openRecorer({audio: true, video: true})">
+					<img :src="camera" alt="">
+				</div>
+				<div class="image">
+					<label for="galery-picker">
+						<img :src="image" alt="">
+					</label>
+					<input type="file" @change="handleAddGaleryFiles" id="galery-picker" accept="image/*,video/*" multiple>
+				</div>
+				<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
+					<img :src="voice" alt="">
+				</div>
+				<div class="text">
+					<textarea v-model="contentToSend.text" @change="handleChange"></textarea>
+					<div class="smile">
+						<img :src="smile" alt="">
+					</div>
+				</div>
+				<div class="send">
+					<div @click="handleSend" v-if="haveContentToSend" class="send">
+						<img :src="send" alt="">
+					</div>
+					<div v-else class="hearth-icon">
+						<img :src="hearth" alt="">
+					</div>
 				</div>
 			</div>
 		</footer>
@@ -362,6 +379,29 @@ main {
 }
 
 footer {
+	position: relative;
+}
+
+footer .file-prev{
+	position: absolute;
+	display: grid;
+	align-items: center;
+	justify-content: space-evenly;
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr) ) ;
+	grid-template-rows: auto auto;
+	height: 200px;
+	bottom: 50px;
+	overflow: auto;
+	gap: 10px;
+	padding: 10px;
+	left: 0;
+	width: 100%;
+	background-color: red;
+	overflow: auto;
+}
+
+
+footer .asset-options {
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
@@ -461,6 +501,19 @@ textarea::-webkit-scrollbar-thumb{
 
 input[type="file"]{
 	display: none;
+}
+
+.file-prev div{
+	width: 80px;
+	height: 80px;
+}
+
+.file-prev img, .file-prev video{
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border-radius: 10px;
+	border: 2px solid rgb(48, 48, 48);
 }
 
 

@@ -140,6 +140,10 @@ const haveContentToSend = computed(() => {
 	return Object.values(contentToSend.value).some(content => content !== null  && content?.length > 0);
 });
 
+const haveFilesForPrev = computed(() => { 
+	return contentToSend.value.files.length > 0 || contentToSend.value.galery.length > 0;
+})
+
 //watchers
 
 watch(contentToSend, (newVal, oldVal) => {
@@ -169,7 +173,7 @@ function restartContentToSend(){
         audio: null,
         image: null,
         text: null,
-        files: null,
+        files: [],
         video: null,
 		galery: []
     };
@@ -220,7 +224,7 @@ function restartContentToSend(){
 			<Message :userId="userId" v-for="message in messages" :key="message.id" :message="message" />
 		</main>
 		<footer>
-			<div class="file-prev">
+			<div class="file-prev" v-if="haveFilesForPrev">
 				<div v-for="file in contentToSend.galery">
 					<img v-if="file.type==='image'" :src="file.url" alt="">
 					<video v-if="file.type==='video'" :src="file.url" alt=""> </video>
@@ -396,8 +400,8 @@ footer .file-prev{
 	padding: 10px;
 	left: 0;
 	width: 100%;
-	background-color: red;
 	overflow: auto;
+	background-color: rgb(10, 10, 10);
 }
 
 

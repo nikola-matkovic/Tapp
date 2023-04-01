@@ -6,6 +6,8 @@ import { onMounted, ref, computed, watch } from 'vue';
 import getMessages from './functions/getMessages.js';
 import Recorder from './classes/Recorder.js';
 
+import axios from 'axios';
+
 const { profilePhoto, phone, video, upload, camera, image, voice, smile, send, hearth } = images;
 
 const messages = ref({});
@@ -14,8 +16,11 @@ const recorder = ref(null);
 const prev = ref(null);
 const imgPrev = ref(null);
 const shouldShowPreview = ref(false);
+const nextId = ref(null);
 
 const contentToSend = ref(null);
+
+userId.value = prompt("unesi svoj id!")
 
 restartContentToSend();
 
@@ -33,13 +38,27 @@ async function handleSend() {
 	await sendToServer()
 
 	restartContentToSend();
+
+	nextId.value += 1
+	messages.value = await getMessages();
+
 }
 
 async function sendToServer(){
-	console.log(contentToSend.value);
+
+	let content = {
+		id : nextId.value,
+		text: contentToSend.value.text,
+		user: {
+			id: userId.value,
+			name: userId.value == "1" ? "Jovana Jovanović" : "Nikola Matković" 
+		}
+	}
+
+	await axios.post('http://localhost:3000/messages', content);
 }
 
-async function openRecorer(sources) {
+async function openRecorder(sources) {
 	shouldShowPreview.value = true;
 	if (sources.video) {
 		contentToSend.value.video = "preview";
@@ -84,7 +103,7 @@ async function handleRecordButtonClick(){
 	}
 }
 
-async function hanleCapturePhotoClick(){
+async function handleCapturePhotoClick(){
 
 	if(isPhotoCaptured.value){
 		recorder.value.prev();
@@ -102,10 +121,10 @@ async function hanleCapturePhotoClick(){
 }
 
 
-function handleAddGaleryFiles(e){
+function handleAddGalleryFiles(e){
 	let files = Array.from(e.target.files)
 
-	contentToSend.value.galery = files.map(file => {
+	contentToSend.value.gallery = files.map(file => {
 
 		let url = URL.createObjectURL(file);
 		let type = file.type.split("/")[0]
@@ -141,7 +160,7 @@ const haveContentToSend = computed(() => {
 });
 
 const haveFilesForPrev = computed(() => { 
-	return contentToSend.value.files.length > 0 || contentToSend.value.galery.length > 0;
+	return contentToSend.value.files.length > 0 || contentToSend.value.gallery.length > 0;
 })
 
 //watchers
@@ -156,6 +175,9 @@ watch(contentToSend, (newVal, oldVal) => {
 
 onMounted(async () => {
 	messages.value = await getMessages();
+
+	nextId.value = messages.value.length +2 ;
+
 	document.addEventListener("keydown" , (e) =>{
 		if(e.key=== "Escape"){
 			// restartContentToSend();
@@ -175,7 +197,7 @@ function restartContentToSend(){
         text: null,
         files: [],
         video: null,
-		galery: []
+		gallery: []
     };
 }
 
@@ -195,7 +217,7 @@ function restartContentToSend(){
 
 			<div class="options">
 				<button class="video-button" @click="handleRecordButtonClick">Video</button>
-				<button class="photo-button" @click="hanleCapturePhotoClick">Photo</button>
+				<button class="photo-button" @click="handleCapturePhotoClick">Photo</button>
 				<button class="change-button">Change</button>
 			</div>
 		</div>
@@ -225,7 +247,7 @@ function restartContentToSend(){
 		</main>
 		<footer>
 			<div class="file-prev" v-if="haveFilesForPrev">
-				<div v-for="file in contentToSend.galery">
+				<div v-for="file in contentToSend.gallery">
 					<img v-if="file.type==='image'" :src="file.url" alt="">
 					<video v-if="file.type==='video'" :src="file.url" alt=""> </video>
 				</div>
@@ -238,14 +260,14 @@ function restartContentToSend(){
 					</label>
 					<input type="file"  @change="handleAddFiles" id="file-picker" multiple>
 				</div>
-				<div class="camera" @click="openRecorer({audio: true, video: true})">
+				<div class="camera" @click="openRecorder({audio: true, video: true})">
 					<img :src="camera" alt="">
 				</div>
 				<div class="image">
-					<label for="galery-picker">
+					<label for="gallery-picker">
 						<img :src="image" alt="">
 					</label>
-					<input type="file" @change="handleAddGaleryFiles" id="galery-picker" accept="image/*,video/*" multiple>
+					<input type="file" @change="handleAddGalleryFiles" id="gallery-picker" accept="image/*,video/*" multiple>
 				</div>
 				<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
 					<img :src="voice" alt="">

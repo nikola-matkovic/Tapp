@@ -1,5 +1,5 @@
 <template>
-    <div class="message" :class="userId === message.user.id ? 'right' : 'left'">
+    <div class="message" :class="userId == message.user_id ? 'right' : 'left'">
         <p> {{ message.text }}</p>
     </div>
 </template>

@@ -5,8 +5,8 @@ import images from './assets/index.js';
 import { onMounted, ref, computed, watch } from 'vue';
 import getMessages from './functions/getMessages.js';
 import Recorder from './classes/Recorder.js';
-
 import axios from 'axios';
+import config  from './config';
 
 const { profilePhoto, phone, video, upload, camera, image, voice, smile, send, hearth } = images;
 
@@ -20,7 +20,9 @@ const nextId = ref(null);
 
 const contentToSend = ref(null);
 
-userId.value = prompt("unesi svoj id!")
+// userId.value = prompt("Unesite id:")
+
+console.log(config)
 
 restartContentToSend();
 
@@ -42,20 +44,23 @@ async function handleSend() {
 	nextId.value += 1
 	messages.value = await getMessages();
 
+	let main = document.querySelector("main");
 }
 
 async function sendToServer(){
 
 	let content = {
-		id : nextId.value,
 		text: contentToSend.value.text,
-		user: {
-			id: userId.value,
-			name: userId.value == "1" ? "Jovana Jovanović" : "Nikola Matković" 
-		}
+		user_id: userId.value
 	}
 
-	await axios.post('http://localhost:3000/messages', content);
+	let data = new FormData()
+
+	for( let key in content){
+		data.append(key, content[key])
+	}
+
+	await axios.post(`${config.url}addMessage.php`, data);
 }
 
 async function openRecorder(sources) {
@@ -184,6 +189,16 @@ onMounted(async () => {
 			shouldShowPreview.value = false;
 		}
 	})
+
+	let main = document.querySelector("main");
+	
+	let interval = setInterval( () => {
+		main.scrollTo(0, main.scrollHeight)
+	}, 1000)
+
+
+console.log(main.scrollHeight)
+
 });
 
 

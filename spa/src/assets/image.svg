@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg 
+   viewBox="0 0 600 600"
+   version="1.1"
+   id="svg9724"
+   sodipodi:docname="image.svg"
+   inkscape:version="1.2.2 (1:1.2.2+202212051550+b0a8486541)"
+   width="600"
+   height="600"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9728" />
+  <sodipodi:namedview
+     id="namedview9726"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="0.84118632"
+     inkscape:cx="313.24808"
+     inkscape:cy="360.79997"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="0"
+     inkscape:window-y="1080"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg9724"
+     showguides="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid9972"
+       originx="0"
+       originy="0" />
+    <sodipodi:guide
+       position="300,360"
+       orientation="1,0"
+       id="guide1208"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  
+  <path
+     style="color:#000000;fill:#020202;stroke-linejoin:round;-inkscape-stroke:none;paint-order:stroke fill markers"
+     d="M 40,0 A 40.004,40.004 0 0 0 0,40 v 520 a 40.004,40.004 0 0 0 40,40 h 520 a 40.004,40.004 0 0 0 40,-40 V 40 A 40.004,40.004 0 0 0 560,0 Z M 80,80 H 520 V 520 H 80 Z"
+     id="rect288" />
+  <path
+     style="color:#000000;fill:#000000;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none"
+     d="m 381.07422,240.16992 c -10.96845,1.00073 -21.03907,6.4794 -27.83789,15.14453 l -67.27149,85.76953 -43.43359,-40.3789 c -17.90934,-16.64689 -46.43069,-13.47436 -60.24414,6.70117 l -75.29492,110 C 88.8283,443.95324 107.83372,479.99382 140,480 h 320.00586 c 29.31788,-0.004 48.67219,-30.5017 36.19336,-57.03125 l -75.29492,-160 c -7.16395,-15.21689 -23.08081,-24.32773 -39.83008,-22.79883 z"
+     id="path344"
+     sodipodi:nodetypes="ccccccccccc" />
+  <path
+     style="color:#000000;fill:#020202;stroke-linecap:round;stroke-linejoin:round;-inkscape-stroke:none;paint-order:stroke fill markers"
+     d="m 185,110 c -40.94753,0 -75,34.05247 -75,75 0,40.94753 34.05247,75 75,75 40.94753,0 75,-34.05247 75,-75 0,-40.94753 -34.05247,-75 -75,-75 z"
+     id="path1006"
+     sodipodi:nodetypes="sssss" />
+</svg>

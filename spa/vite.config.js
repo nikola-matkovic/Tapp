@@ -23,7 +23,7 @@ export default defineConfig({
         assetFileNames: `assets/[name].[ext]`
       }
     },
-    outDir: "../dist", 
+    outDir: "/run/user/1000/gvfs/ftp:host=ftpupload.net/htdocs", 
     emptyOutDir: true,
   }
 })

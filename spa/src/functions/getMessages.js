@@ -3,11 +3,7 @@ import config from '../config';
 
 export default async function getMessages() {
     try {
-        let res = await axios.get(`${config.url}getMessages.php`, {
-            headers :{
-                "Access-Control-Allow-Origin": "*",
-            }
-        });
+        let res = await axios.get(`${config.url}getMessages.php`);
         return res.data;
     }
     catch (err) {

@@ -26,10 +26,12 @@ defineProps({
 	width: 80%;
 }
 .left {
-    background: hsl(261, 100%, 90%);
+    background: hsl(280, 100%, 50%);
+    color: white;
 }
 .right {
-    background: hsl(190, 100%, 90%);
+    background: hsl(55, 100%, 50%);
+    color: black;
     align-self: flex-end;
 }
 

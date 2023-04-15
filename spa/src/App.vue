@@ -20,9 +20,7 @@ const nextId = ref(null);
 
 const contentToSend = ref(null);
 
-// userId.value = prompt("Unesite id:")
-
-console.log(config)
+userId.value = prompt("Unesite id:")
 
 restartContentToSend();
 
@@ -171,7 +169,7 @@ const haveFilesForPrev = computed(() => {
 //watchers
 
 watch(contentToSend, (newVal, oldVal) => {
-	console.log(newVal);
+	// console.log(newVal);
 	},
 	{deep: true}
 );
@@ -192,12 +190,13 @@ onMounted(async () => {
 
 	let main = document.querySelector("main");
 	
-	let interval = setInterval( () => {
-		main.scrollTo(0, main.scrollHeight)
+	let interval = setInterval( async() => {
+		messages.value = await getMessages();
+		// console.log(messages.value[messages.value.length - 1]);
 	}, 1000)
 
 
-console.log(main.scrollHeight)
+// console.log(main.scrollHeight)
 
 });
 
@@ -214,6 +213,12 @@ function restartContentToSend(){
         video: null,
 		gallery: []
     };
+}
+
+async function handleKeyPress(e){
+	if(e.key === "Enter"){
+		await handleSend();
+	}
 }
 
 </script>
@@ -288,13 +293,13 @@ function restartContentToSend(){
 					<img :src="voice" alt="">
 				</div>
 				<div class="text">
-					<textarea v-model="contentToSend.text" @change="handleChange"></textarea>
+					<textarea @keypress="handleKeyPress" v-model="contentToSend.text" @change="handleChange"></textarea>
 					<div class="smile">
 						<img :src="smile" alt="">
 					</div>
 				</div>
 				<div class="send">
-					<div @click="handleSend" v-if="haveContentToSend" class="send">
+					<div @keypress="handleKeyPress" @click="handleSend" v-if="haveContentToSend" class="send">
 						<img :src="send" alt="">
 					</div>
 					<div v-else class="hearth-icon">
@@ -472,6 +477,9 @@ footer .asset-options {
 		resize: none;
 		padding: 10px;
 		padding-right: 50px;
+		// background-color: rgb(30, 30, 30);
+		border: 1px solid black;
+		// color: white;
 	}
 
 	.text .smile {

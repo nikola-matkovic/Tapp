@@ -25,7 +25,12 @@ $conn = new PDO($connString, $username, $password);
 
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$sql = 'select * from messages inner join users on messages.user_id = users.id order by messages.id;';
+$sql = 'SELECT messages.id as id, messages.text, users.id as user_id, users.name
+FROM messages
+INNER JOIN users
+ON messages.user_id = users.id
+ORDER BY messages.id;
+';
 
 $stmt = $conn->prepare($sql);
 

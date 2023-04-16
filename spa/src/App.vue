@@ -16,11 +16,12 @@ const recorder = ref(null);
 const prev = ref(null);
 const imgPrev = ref(null);
 const shouldShowPreview = ref(false);
-const nextId = ref(null);
-
+const numberOfMessages = ref(null);
+const main = ref(null);
 const contentToSend = ref(null);
 
-userId.value = prompt("Unesite id:")
+// userId.value = prompt("Unesite id:")
+userId.value = 2;
 
 restartContentToSend();
 
@@ -39,10 +40,9 @@ async function handleSend() {
 
 	restartContentToSend();
 
-	nextId.value += 1
 	messages.value = await getMessages();
-
-	let main = document.querySelector("main");
+	
+	scrollToBottom();
 }
 
 async function sendToServer(){
@@ -177,9 +177,11 @@ watch(contentToSend, (newVal, oldVal) => {
 //mounted
 
 onMounted(async () => {
-	messages.value = await getMessages();
 
-	nextId.value = messages.value.length +2 ;
+	messages.value = await getMessages();
+	numberOfMessages.value = messages.value.length;
+
+	scrollToBottom()
 
 	document.addEventListener("keydown" , (e) =>{
 		if(e.key=== "Escape"){
@@ -187,16 +189,13 @@ onMounted(async () => {
 			shouldShowPreview.value = false;
 		}
 	})
-
-	let main = document.querySelector("main");
 	
 	let interval = setInterval( async() => {
 		messages.value = await getMessages();
-		// console.log(messages.value[messages.value.length - 1]);
+		if(messages.value.length > numberOfMessages)	{
+			scrollToBottom();
+		}
 	}, 1000)
-
-
-// console.log(main.scrollHeight)
 
 });
 
@@ -219,6 +218,22 @@ async function handleKeyPress(e){
 	if(e.key === "Enter"){
 		await handleSend();
 	}
+}
+
+function scrollToBottom(){
+	let scrollHeight = main.value.scrollHeight; 
+	let newScrollHeight = scrollHeight; 
+
+	console.log(scrollHeight)
+
+	let interval = setInterval(() => {
+		newScrollHeight = main.value.scrollHeight; 
+		console.log(newScrollHeight)
+		if(newScrollHeight !== scrollHeight){
+			main.value.scrollTo(0, main.value.scrollHeight);
+			clearInterval(interval);
+		}
+	}, 50);
 }
 
 </script>
@@ -262,7 +277,7 @@ async function handleKeyPress(e){
 			</div>
 
 		</header>
-		<main>
+		<main ref="main">
 			<Message :userId="userId" v-for="message in messages" :key="message.id" :message="message" />
 		</main>
 		<footer>

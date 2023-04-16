@@ -18,6 +18,13 @@ else{
     $database = "epiz_33878269_tapp";
 }
 
+$user_password = $_POST['password'];
+
+if( !($user_password === "Jovana123" || $user_password === "Nikola123")){
+    echo "Invalid password";
+    die(1);
+}
+
 
 $connString = "mysql:host=$host;dbname=$database";
 

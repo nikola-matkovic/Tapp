@@ -19,9 +19,14 @@ const shouldShowPreview = ref(false);
 const numberOfMessages = ref(null);
 const main = ref(null);
 const contentToSend = ref(null);
+const userPassword = ref(null);
 
-// userId.value = prompt("Unesite id:")
-userId.value = 2;
+userId.value = prompt("Unesite id:"); 
+if(userId.value == 1)
+	userPassword.value = prompt("Draga moja ženo, koju puno volim, unesi šifru <3")
+else 
+	userPassword.value = prompt("Unesi šifru")
+
 
 restartContentToSend();
 
@@ -40,7 +45,7 @@ async function handleSend() {
 
 	restartContentToSend();
 
-	messages.value = await getMessages();
+	messages.value = await getMessages(userPassword.value);
 	
 	scrollToBottom();
 }
@@ -178,7 +183,7 @@ watch(contentToSend, (newVal, oldVal) => {
 
 onMounted(async () => {
 
-	messages.value = await getMessages();
+	messages.value = await getMessages(userPassword.value);
 	numberOfMessages.value = messages.value.length;
 
 	scrollToBottom()
@@ -191,7 +196,7 @@ onMounted(async () => {
 	})
 	
 	let interval = setInterval( async() => {
-		messages.value = await getMessages();
+		messages.value = await getMessages(userPassword.value);
 		if(messages.value.length > numberOfMessages)	{
 			scrollToBottom();
 		}

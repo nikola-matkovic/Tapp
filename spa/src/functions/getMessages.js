@@ -1,9 +1,12 @@
 import axios from 'axios';
 import config from '../config';
 
-export default async function getMessages() {
+export default async function getMessages(password) {
     try {
-        let res = await axios.get(`${config.url}getMessages.php`);
+        console.log(password)
+        let res = await axios.post(`${config.url}getMessages.php`, {
+            password : password,
+        });
         return res.data;
     }
     catch (err) {

@@ -30,7 +30,7 @@ $conn = new PDO($connString, $username, $password);
 
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$sql = 'SELECT background from users where id = ?';
+$sql = 'SELECT background, background_opacity from users where id = ?';
 
 $stmt = $conn->prepare($sql);
 

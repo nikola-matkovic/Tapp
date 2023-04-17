@@ -7,7 +7,10 @@ export default async function getBackground(user, password) {
         data.append("password", password);
         data.append("user", user)
         let res = await axios.post(`${config.url}getBackground.php`, data);
-        return config.url + "upload/" + res.data[0].background;
+        return {
+            url: config.url + "upload/" + res.data[0].background,
+            opacity : res.data[0].background_opacity
+        }
     }
     catch (err) {
         return false

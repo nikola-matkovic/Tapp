@@ -24,7 +24,8 @@ defineProps({
     color: rgb(17, 27, 33);
     line-height: 20px;
 	width: fit-content;
-    max-width: 80%
+    max-width: 80%; 
+    box-shadow:2px 2px 5px 0 rgba(0, 0, 0, .3)
 }
 .left {
     background: hsl(280, 100%, 50%);

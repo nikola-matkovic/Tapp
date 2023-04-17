@@ -15,6 +15,7 @@ $path_filename_ext = $target_dir.$filename.".".$ext;
  
 $user = $_POST["user_id"];
 $user_password = $_POST["password"];
+$opacity = $_POST["opacity"];
 
 $string = bin2hex(random_bytes(10)) . "." .$ext;
 
@@ -45,12 +46,12 @@ $conn = new PDO($connString, $username, $password);
 
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$sql = "UPDATE users SET background = ? WHERE id = ?;";
+$sql = "UPDATE users SET background = ? , background_opacity = ? WHERE id = ?;";
 
 $stmt = $conn->prepare($sql);
 
 try {
-    $stmt->execute([$string, $user]);
+    $stmt->execute([$string, $opacity, $user]);
 }
 catch (PDOException $e) {
     echo "Error: " . $e->getMessage();

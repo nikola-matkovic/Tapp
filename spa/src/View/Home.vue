@@ -28,8 +28,7 @@ const background = ref(null);
 
 let debug = true;
 
-
-if(!debug){
+if(!debug  && !store.user){
 	store.user = prompt("Unesite id:"); 
 	if(store.user == 1)
 		store.password = prompt("Draga moja ženo, koju puno volim, unesi šifru <3")
@@ -202,13 +201,22 @@ onMounted(async () => {
 
 	scrollToBottom()
 
-
 	background.value = await getBackground(store.user, store.password);
 	
-	console.log(background.value);
-
 	if(background.value){
-		main.value.style.backgroundImage = `url(${background.value})` ;
+
+		let darkness = background.value.opacity / 100;
+		console.log(darkness);
+
+		main.value.style.backgroundImage = `
+		
+        linear-gradient(
+          rgba(0, 0, 0, ${darkness}), 
+          rgba(0, 0, 0, ${darkness})
+        ),
+
+		url(${background.value.url})` ;
+
 	}
 
 	document.addEventListener("keydown" , (e) =>{
@@ -288,7 +296,7 @@ function scrollToBottom(){
 			</div>
 
 			<div class="center">
-				<h3>Nikola Matković</h3>
+				<h3>мејд вит 💙 </h3>
 			</div>
 
 			<div class="right">

@@ -1,10 +1,12 @@
 <template>
     <div id="settings">
+        <h1>Одабери затамљеност</h1>
+        <input type="range" name="" id="" min="0" max="100" v-model="opacity">
         <label for="chose-background">
-            Odaberi pozadinu 
+            Одабери Позадину 
         </label>
         <input type="file" ref="input" name="file_upload" id="chose-background" accept="image/*" >
-        <button @click="setBackground()">Gotovo</button>
+        <button @click="setBackground()">Готово</button>
     </div>
 </template>
 
@@ -17,18 +19,19 @@ import { useAppStore } from '../store';
 import router from '../Router';
 
 const input  = ref(null)
+const opacity = ref(50)
 const store = useAppStore();
 
 async function setBackground(){
 
     let data = new FormData();
-    
-    console.log(input.value.files)
 
     data.append("user_id", store.user);
     data.append("password", store.password);
     data.append("file", input.value.files[0]);
+    data.append("opacity", opacity.value);
 
+    console.log(opacity.value)
     try {
         let res = await axios.post(config.url + "setBackground.php", data,   {
         Headers : {
@@ -55,8 +58,12 @@ async function setBackground(){
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     gap: 20px;
 
+    input {
+        width: 80%;
+    }
     label, button {
         background-color: transparent;
         color: white;
@@ -67,6 +74,7 @@ async function setBackground(){
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        width: 50%;
     }
 }
 

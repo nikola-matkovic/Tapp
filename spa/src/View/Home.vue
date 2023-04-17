@@ -24,7 +24,6 @@ const shouldShowPreview = ref(false);
 const numberOfMessages = ref(null);
 const main = ref(null);
 const contentToSend = ref(null);
-
 let debug = true;
 
 if(!debug){

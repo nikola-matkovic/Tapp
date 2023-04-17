@@ -18,10 +18,13 @@ import { RouterView } from 'vue-router';
 	border: 1px solid black;
 	border-radius: 10px;
 	overflow: hidden;
-	display: grid;
-	grid-template-rows: var(--header-size) 1fr 50px;
 	resize: both;
 	position: relative;
 }
+.cont:has(main){
+	display: grid;
+	grid-template-rows: var(--header-size) 1fr 50px;
+}
+
 
 </style>

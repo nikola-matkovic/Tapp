@@ -25,3 +25,4 @@ dist-ssr
 .env
 .env.prod
 .env.dev
+upload

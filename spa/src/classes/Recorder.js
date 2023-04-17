@@ -32,7 +32,8 @@ export default class Recorder {
 
         this.recorder.addEventListener("stop", () => {
 
-            const blob = new Blob(mediaChunks);
+            const blob = new Blob(mediaChunks, {type: "audio/mpeg", name: "audio.mp3"});
+            
             const url = URL.createObjectURL(blob)
 
             this.media = { blob, url };

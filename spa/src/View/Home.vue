@@ -64,18 +64,20 @@ async function handleSend() {
 
 async function sendToServer(){
 
-	let content = {
-		text: contentToSend.value.text,
-		user_id: store.user
+	let data = new FormData();
+
+	data.append("text", contentToSend.value.text);
+	data.append("user_id", store.user);
+
+	if(contentToSend.value.audio instanceof Blob){
+		data.append("audio", contentToSend.value.audio, "audio.mp3");
 	}
-
-	let data = new FormData()
-
-	for( let key in content){
-		data.append(key, content[key])
-	}
-
-	await axios.post(`${config.url}addMessage.php`, data);
+	
+	await axios.post(`${config.url}addMessage.php`, data, {
+		headers : {
+            'content-type': 'multipart/form-data'
+        }
+	});
 }
 
 async function openRecorder(sources) {
@@ -206,7 +208,6 @@ onMounted(async () => {
 	if(background.value){
 
 		let darkness = background.value.opacity / 100;
-		console.log(darkness);
 
 		main.value.style.backgroundImage = `
 		

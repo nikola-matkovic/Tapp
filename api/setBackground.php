@@ -10,8 +10,6 @@ $name = $file["name"];
 $ext = explode(".", $name);
 $ext = array_pop($ext);
 $temp = $file["tmp_name"];
-
-$path_filename_ext = $target_dir.$filename.".".$ext;
  
 $user = $_POST["user_id"];
 $user_password = $_POST["password"];

@@ -1,10 +1,12 @@
 <template>
     <div class="message" :class="userId == message.user_id ? 'right' : 'left'">
-        <p> {{ message.text }}</p>
+        <p v-if="message.text !== 'null'"> {{ message.text }} </p>
+        <audio v-if="message.audio" controls :src='`${config.url}upload/${message.audio}`'></audio>
     </div>
 </template>
 
 <script setup>
+import config from '../config';
 
 defineProps({
     message: Object,
@@ -32,10 +34,13 @@ defineProps({
     color: white;
 }
 .right {
-    background: hsl(55, 100%, 50%);
+    background: hsl(58, 100%, 50%);
     color: black;
     align-self: flex-end;
 }
 
+audio *{
+    background-color: black;
+}
 
 </style>

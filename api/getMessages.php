@@ -32,7 +32,7 @@ $conn = new PDO($connString, $username, $password);
 
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$sql = 'SELECT messages.id as id, messages.text, users.id as user_id, users.name
+$sql = 'SELECT messages.id as id, messages.text, messages.audio, users.id as user_id, users.name
 FROM messages
 INNER JOIN users
 ON messages.user_id = users.id

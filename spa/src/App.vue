@@ -26,5 +26,9 @@ import { RouterView } from 'vue-router';
 	grid-template-rows: var(--header-size) 1fr 50px;
 }
 
+body{
+	background-color: black;
+}
+
 
 </style>

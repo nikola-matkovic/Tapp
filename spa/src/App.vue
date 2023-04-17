@@ -204,7 +204,11 @@ onMounted(async () => {
 	
 	let interval = setInterval( async() => {
 		messages.value = await getMessages(userPassword.value);
-		if(messages.value.length > numberOfMessages)	{
+
+		console.log(numberOfMessages.value, messages.value.length);
+
+		if(messages.value.length > numberOfMessages.value)	{
+			numberOfMessages.value = messages.value.length;
 			scrollToBottom();
 		}
 	}, 1000)
@@ -236,11 +240,9 @@ function scrollToBottom(){
 	let scrollHeight = main.value.scrollHeight; 
 	let newScrollHeight = scrollHeight; 
 
-	console.log(scrollHeight)
 
 	let interval = setInterval(() => {
 		newScrollHeight = main.value.scrollHeight; 
-		console.log(newScrollHeight)
 		if(newScrollHeight !== scrollHeight){
 			main.value.scrollTo(0, main.value.scrollHeight);
 			clearInterval(interval);

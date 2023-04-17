@@ -7,11 +7,16 @@ import getMessages from '../functions/getMessages.js';
 import Recorder from '../classes/Recorder.js';
 import axios from 'axios';
 import config  from '../config';
+import router from '../Router';
+
+import { useAppStore } from "../store";
+const store = useAppStore();
 
 const { profilePhoto, phone, video, upload, camera, image, voice, smile, send, hearth } = images;
 
+
+
 const messages = ref({});
-const userId = ref("1");
 const recorder = ref(null);
 const prev = ref(null);
 const imgPrev = ref(null);
@@ -19,20 +24,19 @@ const shouldShowPreview = ref(false);
 const numberOfMessages = ref(null);
 const main = ref(null);
 const contentToSend = ref(null);
-const userPassword = ref(null);
-
 
 let debug = true;
+
 if(!debug){
-	userId.value = prompt("Unesite id:"); 
-	if(userId.value == 1)
-		userPassword.value = prompt("Draga moja ženo, koju puno volim, unesi šifru <3")
+	store.user = prompt("Unesite id:"); 
+	if(store.user == 1)
+		store.password = prompt("Draga moja ženo, koju puno volim, unesi šifru <3")
 	else 
-		userPassword.value = prompt("Unesi šifru")
+		store.password = prompt("Unesi šifru")
 }
 else{
-	userId.value = 2; 
-	userPassword.value = "Nikola123";
+    store.user = 2;
+	store.password = "Nikola123";
 }
 
 restartContentToSend();
@@ -52,7 +56,7 @@ async function handleSend() {
 
 	restartContentToSend();
 
-	messages.value = await getMessages(userPassword.value);
+	messages.value = await getMessages(store.password);
 	
 	scrollToBottom();
 }
@@ -61,7 +65,7 @@ async function sendToServer(){
 
 	let content = {
 		text: contentToSend.value.text,
-		user_id: userId.value
+		user_id: store.user
 	}
 
 	let data = new FormData()
@@ -190,7 +194,7 @@ watch(contentToSend, (newVal, oldVal) => {
 
 onMounted(async () => {
 
-	messages.value = await getMessages(userPassword.value);
+	messages.value = await getMessages(store.password);
 	numberOfMessages.value = messages.value.length;
 
 	scrollToBottom()
@@ -203,7 +207,7 @@ onMounted(async () => {
 	})
 	
 	let interval = setInterval( async() => {
-		messages.value = await getMessages(userPassword.value);
+		messages.value = await getMessages(store.password);
 		if(messages.value.length > numberOfMessages.value)	{
 			numberOfMessages.value = messages.value.length;
 			scrollToBottom();
@@ -250,9 +254,7 @@ function scrollToBottom(){
 </script>
 
 <template>
-	
-	<div class="cont">
-		<div class="video-prev" v-if="shouldShowPreview" >
+	<div class="video-prev" v-if="shouldShowPreview" >
 			<video ref="prev" id="video-prev" :muted="!isVideoRecorded" :autoplay="!isVideoRecorded" :controls="isVideoRecorded"></video>
 			<img :style="{display: isPhotoCaptured ? 'block' : 'none'  }" ref="imgPrev" alt="">
 			<div class="settings">
@@ -280,7 +282,7 @@ function scrollToBottom(){
 			<div class="right">
 				<img :src="phone" alt="">
 				<img :src="video" alt="">
-				<div class="dots" @click="">
+				<div class="dots" @click="router.replace('/settings')">
 					<div class="dot"></div>
 					<div class="dot"></div>
 					<div class="dot"></div>
@@ -289,7 +291,7 @@ function scrollToBottom(){
 
 		</header>
 		<main ref="main">
-			<Message :userId="userId" v-for="message in messages" :key="message.id" :message="message" />
+			<Message :userId="store.user" v-for="message in messages" :key="message.id" :message="message" />
 		</main>
 		<footer>
 			<div class="file-prev" v-if="haveFilesForPrev">
@@ -334,7 +336,6 @@ function scrollToBottom(){
 				</div>
 			</div>
 		</footer>
-	</div>
 </template>
 
 <style lang="scss">
@@ -411,17 +412,7 @@ header{
 	}
 }
 
-.cont {
-	width: 470px;
-	height: 100%;
-	border: 1px solid black;
-	border-radius: 10px;
-	overflow: hidden;
-	display: grid;
-	grid-template-rows: var(--header-size) 1fr 50px;
-	resize: both;
-	position: relative;
-}
+
 
 main {
 	display: flex;

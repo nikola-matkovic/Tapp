@@ -4,17 +4,17 @@ import Message from '../components/Message.vue';
 import images from '../assets/index.js';
 import { onMounted, ref, computed, watch } from 'vue';
 import getMessages from '../functions/getMessages.js';
+import getBackground from "../functions/getBackground.js";
 import Recorder from '../classes/Recorder.js';
 import axios from 'axios';
 import config  from '../config';
 import router from '../Router';
 
 import { useAppStore } from "../store";
+
 const store = useAppStore();
 
 const { profilePhoto, phone, video, upload, camera, image, voice, smile, send, hearth } = images;
-
-
 
 const messages = ref({});
 const recorder = ref(null);
@@ -24,7 +24,10 @@ const shouldShowPreview = ref(false);
 const numberOfMessages = ref(null);
 const main = ref(null);
 const contentToSend = ref(null);
+const background = ref(null);
+
 let debug = true;
+
 
 if(!debug){
 	store.user = prompt("Unesite id:"); 
@@ -194,9 +197,19 @@ watch(contentToSend, (newVal, oldVal) => {
 onMounted(async () => {
 
 	messages.value = await getMessages(store.password);
+
 	numberOfMessages.value = messages.value.length;
 
 	scrollToBottom()
+
+
+	background.value = await getBackground(store.user, store.password);
+	
+	console.log(background.value);
+
+	if(background.value){
+		main.value.style.backgroundImage = `url(${background.value})` ;
+	}
 
 	document.addEventListener("keydown" , (e) =>{
 		if(e.key=== "Escape"){
@@ -423,6 +436,8 @@ main {
 	padding: 10px;
 	background-color: rgb(22, 22, 22);
 	overflow-x: hidden;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 
 ::-webkit-scrollbar {

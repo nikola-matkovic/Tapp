@@ -21,12 +21,19 @@ const main = ref(null);
 const contentToSend = ref(null);
 const userPassword = ref(null);
 
-userId.value = prompt("Unesite id:"); 
-if(userId.value == 1)
-	userPassword.value = prompt("Draga moja ženo, koju puno volim, unesi šifru <3")
-else 
-	userPassword.value = prompt("Unesi šifru")
 
+let debug = true;
+if(!debug){
+	userId.value = prompt("Unesite id:"); 
+	if(userId.value == 1)
+		userPassword.value = prompt("Draga moja ženo, koju puno volim, unesi šifru <3")
+	else 
+		userPassword.value = prompt("Unesi šifru")
+}
+else{
+	userId.value = 2; 
+	userPassword.value = "Nikola123";
+}
 
 restartContentToSend();
 
@@ -294,13 +301,13 @@ function scrollToBottom(){
 			</div>
 
 			<div class="asset-options">
-				<div class="file">
+				<div class="file" >
 					<label for="file-picker">
 						<img :src="upload" alt="">
 					</label>
 					<input type="file"  @change="handleAddFiles" id="file-picker" multiple>
 				</div>
-				<div class="camera" @click="openRecorder({audio: true, video: true})">
+				<div class="camera" @click="openRecorder({audio: true, video: true})" >
 					<img :src="camera" alt="">
 				</div>
 				<div class="image">
@@ -309,7 +316,7 @@ function scrollToBottom(){
 					</label>
 					<input type="file" @change="handleAddGalleryFiles" id="gallery-picker" accept="image/*,video/*" multiple>
 				</div>
-				<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})">
+				<div ref="voiceElement" class="voice" @click="recordVoice({audio: true, video: false})" >
 					<img :src="voice" alt="">
 				</div>
 				<div class="text">
@@ -468,13 +475,26 @@ footer .file-prev{
 
 
 footer .asset-options {
+
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly;
+	justify-content: space-between;
 	gap: 20px;
 	padding: 0 10px;
 	background-color: rgb(255, 255, 255);
 	height: 50px;
+	overflow: hidden;
+
+	transition: all .4s;
+
+	.image, 
+	.camera, 
+	.file, 
+	.voice {
+		overflow: hidden;
+		width: 30px;
+		transition: all .4s;
+	}
 
 	img {
 		width: 30px;
@@ -487,9 +507,12 @@ footer .asset-options {
 		display: flex;
 		justify-self: center;
 		align-items: center;
+		flex-grow: 1;
+		transition: all .3s ease-in-out;
 	}
 	textarea {
-		width: 100%;
+		display: inline;
+		width: 90%;
 		height: 40px;
 		border-radius: 20px;
 		border: none;
@@ -500,9 +523,11 @@ footer .asset-options {
 		// background-color: rgb(30, 30, 30);
 		border: 1px solid black;
 		// color: white;
+		transition: all .3s ease-in-out;
 	}
 
 	.text .smile {
+		display: none;
 		position: absolute;
 		right: 5px;
 		bottom: 20px;
@@ -583,6 +608,19 @@ input[type="file"]{
 	object-fit: cover;
 	border-radius: 10px;
 	border: 2px solid rgb(48, 48, 48);
+}
+
+.asset-options:has(textarea:focus){
+
+	gap: 0;
+
+	.file, 
+	.image, 
+	.camera, 
+	.voice{
+		width: 0;
+	}
+
 }
 
 

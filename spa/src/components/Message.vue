@@ -23,7 +23,8 @@ defineProps({
     white-space: pre-wrap;
     color: rgb(17, 27, 33);
     line-height: 20px;
-	width: 80%;
+	width: fit-content;
+    max-width: 80%
 }
 .left {
     background: hsl(280, 100%, 50%);

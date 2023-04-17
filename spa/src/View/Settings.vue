@@ -14,10 +14,9 @@ import {ref} from 'vue';
 import axios from 'axios';
 import config from '../config';
 import { useAppStore } from '../store';
+import router from '../Router';
 
 const input  = ref(null)
-
-
 const store = useAppStore();
 
 async function setBackground(){
@@ -35,7 +34,7 @@ async function setBackground(){
         Headers : {
             'content-type': 'multipart/form-data'
         }})
-        console.log(res)
+        router.replace("/")
     }
     catch(e){
         console.log(e)

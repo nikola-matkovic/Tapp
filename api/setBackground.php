@@ -19,18 +19,18 @@ $string = bin2hex(random_bytes(10)) . "." .$ext;
 
 move_uploaded_file($temp, $target_dir . "/" . $string);
 
-if($_SERVER["SERVER_NAME"] === "localhost" ){
-    $host = "localhost";
-    $username = "nikola";
-    $password = "nikola";
-    $database = "tapp";
-}
-else{
-    $host = "sql203.epizy.com";
-    $username = "epiz_33878269";
-    $password = "37lro6zKEVV";
-    $database = "epiz_33878269_tapp";
-}
+// if($_SERVER["SERVER_NAME"] === "localhost" ){
+$host = "localhost";
+$username = "nikola";
+$password = "nikola";
+$database = "tapp";
+// }
+// else{
+//     $host = "sql203.epizy.com";
+//     $username = "epiz_33878269";
+//     $password = "37lro6zKEVV";
+//     $database = "epiz_33878269_tapp";
+// }
 
 if( !($user_password === "Jovana123" || $user_password === "Nikola123")){
     echo "Invalid password";

@@ -23,7 +23,8 @@ export default defineConfig({
         assetFileNames: `assets/[name].[ext]`
       }
     },
-    outDir: "/run/user/1000/gvfs/ftp:host=ftpupload.net/htdocs", 
+    // outDir: "/run/user/1000/gvfs/ftp:host=ftpupload.net/htdocs", 
+    outDir : "../../tapp_build", 
     emptyOutDir: true,
   }
 })

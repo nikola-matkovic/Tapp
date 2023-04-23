@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "apache" : "vite build && cp -r ../api/ ../../tapp_build",
     "build": "mv .env .env.dev && mv .env.prod .env && vite build &&  mv .env .env.prod && mv .env.dev .env && cp -r ../api/ /run/user/1000/gvfs/ftp:host=ftpupload.net/htdocs",
     "preview": "vite preview",
     "json": "json-server --watch db.json --port 3000 && echo works"

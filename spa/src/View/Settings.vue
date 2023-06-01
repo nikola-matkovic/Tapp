@@ -54,7 +54,7 @@ async function setBackground(){
 #settings{
     background: rgb(22, 22, 22);
     height: 100%;
-    color: white;
+    color: yellow;
     display: flex;
     justify-content: center;
     align-items: center;

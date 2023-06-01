@@ -3,106 +3,80 @@
     {
       "id": "1",
       "text": "Qui laboris fugiat proident Lorem proident do esse consequat nulla officia minim fugiat incididunt.",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "1",
+      "name": "Jovana Jovanović"
     },
     {
       "id": "2",
       "text": "Laborum ipsum est nulla ut excepteur eiusmod do dolore velit. Tempor aliqua deserunt et duis id. Proident sit laborum nostrud ut. Nulla eu enim officia labore. Exercitation voluptate amet mollit eiusmod fugiat consectetur consequat. Enim cillum commodo ipsum in qui sunt magna ipsum occaecat excepteur aute nostrud id officia. Ipsum aliquip consequat magna pariatur.",
-      "user": {
-        "id": "2",
-        "name": "Nikola Matković"
-      }
+      "user_id": "2",
+      "name": "Nikola Matković"
     },
     {
       "id": "3",
       "text": "Laboris dolor do ullamco veniam aliquip. Incididunt exercitation do excepteur irure laborum ullamco laborum qui aute est. Occaecat in laborum irure mollit sunt deserunt aliqua dolore cupidatat elit ex excepteur excepteur do. Proident aliqua in Lorem aliqua ex. Elit consectetur laboris Lorem mollit enim esse irure duis pariatur.Sunt nostrud qui sunt do voluptate fugiat incididunt id mollit adipisicing veniam nisi. Et elit anim consectetur elit mollit. Aliquip id fugiat commodo tempor commodo. Non aliquip excepteur consectetur proident fugiat proident sunt non quis labore et ullamco aliqua.ute consectetur non adipisicing esse nulla ipsum. Tempor voluptate ipsum Lorem labore laborum minim et occaecat minim labore nisi sint. Laborum incididunt nisi cupidatat eiusmod sint occaecat est aute Lorem culpa sunt culpa. Ad do incididunt consectetur eiusmod officia culpa mollit commodo cupidatat excepteur eiusmod aliqua adipisicing ipsum. Laboris voluptate sunt culpa deserunt incididunt excepteur pariatur.",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "2",
+      "name": "Jovana Jovanović"
     },
     {
       "id": "4",
       "text": "Laboris dolor do ullamco veniam aliquip. Incididunt exercitation do excepteur irure laborum ullamco laborum qui aute est. Occaecat in laborum irure mollit sunt deserunt aliqua dolore cupidatat elit ex excepteur excepteur do. Proident aliqua in Lorem aliqua ex. Elit consectetur laboris Lorem mollit enim esse irure duis pariatur.Sunt nostrud qui sunt do voluptate fugiat incididunt id mollit adipisicing veniam nisi. Et elit anim consectetur elit mollit. Aliquip id fugiat commodo tempor commodo. Non aliquip excepteur consectetur proident fugiat proident sunt non quis labore et ullamco aliqua.ute consectetur non adipisicing esse nulla ipsum. Tempor voluptate ipsum Lorem labore laborum minim et occaecat minim labore nisi sint. Laborum incididunt nisi cupidatat eiusmod sint occaecat est aute Lorem culpa sunt culpa. Ad do incididunt consectetur eiusmod officia culpa mollit commodo cupidatat excepteur eiusmod aliqua adipisicing ipsum. Laboris voluptate sunt culpa deserunt incididunt excepteur pariatur.",
-      "user": {
-        "id": "1",
+      "user_id": "1",
         "name": "Jovana Jovanović"
-      }
     },
     {
       "id": "5",
       "text": "Aliquip consectetur aliqua ex qui voluptate officia aliquip consequat nulla nulla quis dolor minim. Ipsum excepteur veniam aute voluptate id ad tempor sunt ad velit ad sit cupidatat. Et deserunt exercitation magna minim. Sit magna est deserunt quis voluptate ut laborum id consequat quis culpa aliqua. Ex laborum ipsum dolore anim velit sunt culpa nisi excepteur nostrud occaecat velit. Velit enim voluptate deserunt irure dolore in commodo esse ad cillum exercitation cupidatat nisi velit.",
-      "user": {
-        "id": "2",
+      "user_id": "2",
         "name": "Nikola Matković"
-      }
     },
     {
       "id": 7,
       "text": "nikola\n",
-      "user": {
-        "id": "1",
+      "user_id": "2",
         "name": "Jovana Jovanović"
-      }
     },
     {
       "id": 8,
       "text": "nikola\n",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "2",
+      "name": "Jovana Jovanović"
     },
     {
       "id": 9,
       "text": "test 1",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "2",
+      "name": "Jovana Jovanović"
     },
     {
       "id": 10,
       "text": "Jovana",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "1",
+      "name": "Jovana Jovanović"
     },
     {
       "id": 11,
       "text": "kako si ",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "1",
+      "name": "Jovana Jovanović"
     },
     {
       "id": 12,
       "text": "nikola ",
-      "user": {
-        "id": "1",
-        "name": "Jovana Jovanović"
-      }
+      "user_id": "2",
+      "name": "Jovana Jovanović"
     },
     {
       "id": 13,
       "text": "matko",
-      "user": {
-        "id": "2",
-        "name": "Nikola Matković"
-      }
+      "user_id": "2",
+      "name": "Nikola Matković"
     },
     {
       "id": 14,
       "text": "Maktović",
-      "user": {
-        "id": "2",
-        "name": "Nikola Matković"
-      }
+      "user_id": "2",
+      "name": "Nikola Matković"
     }
   ]
 }
